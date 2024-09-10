@@ -59,7 +59,7 @@
     {{-- <script
        src="{{asset ('js/app.js') }}">
     </script> --}}
-    <script>
+    {{-- <script>
         let access_token;
         document.getElementById('getAccessToken').addEventListener('click', (event) => {
             event.preventDefault()
@@ -116,4 +116,4 @@
     </script>
 </body>
 
-</html>
+</html> --}}

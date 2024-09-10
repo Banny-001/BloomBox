@@ -20,7 +20,7 @@ use App\Models\User;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\WebhookController;
-
+use App\Http\Controllers\MpesaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,7 +47,7 @@ Route::post('pay/order',[PaymentController::class,'payByStripe']);
 Route::post('validation',[MpesaResponsesController::class,'validation']);
 Route::post('confirmation',[MpesaResponsesController::class,'confirmation']);
 Route::post('simulate',[MpesaResponsesController::class,'simulateTransaction']);
-Route::post('/stkpush',[MpesaResponsesController::class,'stkPush']);
+Route::post('/stkpush',[MpesaResponsesController::class,'stkpush']);
 //stripe
 Route::post('/payment-success',[PaymentController::class,'success']);
 Route::post('/payment-cancel',[PaymentController::class,'cancel']);

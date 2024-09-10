@@ -61,7 +61,7 @@ Route::get('/mpesa', function () {
     return view('Mpesa');
 });
 Route::get('/stk', function () {
-    return view('stk');
+    return view('payment/stk');
 });
 Route::get('/invoice', function () {
     return view('invoice/invoice');
@@ -103,7 +103,7 @@ Route::post('get-token', [MpesaController::class, 'getAccessToken']);
 Route::post('register-urls', [MpesaController::class, 'registerURLS']);
 Route::post('simulate', [MpesaController::class, 'simulateTransaction']);
 
-Route::post('stkpush', [MpesaController::class, 'stkPush']);
+ Route::post('stkpush', [MpesaController::class, 'stkpush']);
 
 //permissions
 Route::get('add-permission',[RolesAndPermissionController::class,'addPermissions']);

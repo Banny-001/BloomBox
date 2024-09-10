@@ -27,8 +27,8 @@ class MpesaController extends Controller
                 CURLOPT_USERPWD => env('MPESA_CONSUMER_KEY') . ':' . env('MPESA_CONSUMER_SECRET')
             )
         );
-        $response = curl_exec($curl);
-        \curl_close($curl);
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
 
         // self::$accessBearerToken = $response;
         // return self::$accessBearerToken;
@@ -51,43 +51,44 @@ class MpesaController extends Controller
         );
 
 
-        $url = env('MPESA_ENV') == 0
-            ? 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl'
-            : 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+        // $url = env('MPESA_ENV') == 0
+        //     ? 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl'
+        //     : 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
 
-        $token = $request->token;
+        // $token = $request->token;
 
-
-        $response = $this->makeHttp($url, $token, $body);
-        
+        $url='/c2b/v1/registerurl';
+        $response = $this->makeHttp($url,  $body);
+        // $token,
         return $response;
     }
       //STK
-    //  public function  stkPush (Request $request)
-    //   {
-    //     $timestamp = date('YmdHis');
-    //      $password =env('MPESA_STK_SHORTCODE').env('MPESA_PASSKEY'). $timestamp;
+     public function  stkpush (Request $request)
+      {
+        $timestamp = date('YmdHis');
+         $password =env('MPESA_STK_SHORTCODE').env('MPESA_PASSKEY'). $timestamp;
         
-    //     $curl_post_data =array(
-    //        'BusinessShortcode'=> env('MPESA_STK_SHORTCODE'),
-    //        'Password' => $password,
-    //        'Timestamp' => $timestamp,
-    //        'TransactionType' => 'CustomerPayBillOnline',
-    //        'Amount' => $request->amount,
-    //        'PartyA' => $request -> phone,
-    //        'PartyB' => env('MPESA_STK_SHORTCODE'),
-    //        'PhoneNumber' => $request -> phone,
-    //        'CallBackURL' => env('MPESA_TEST_URL'). '/api/stkpush',
-    //        'AccountReference' => $request -> account,
-    //       'TransactionDesc' => $request -> account
-    //     );
+        $curl_post_data =array(
+           'BusinessShortcode'=> env('MPESA_STK_SHORTCODE'),
+           'Password' => $password,
+           'Timestamp' => $timestamp,
+           'TransactionType' => 'CustomerPayBillOnline',
+           'Amount' => $request->amount,
+           'PartyA' => $request -> phone,
+           'PartyB' => env('MPESA_STK_SHORTCODE'),
+           'PhoneNumber' => $request -> phone,
+           'CallBackURL' => env('MPESA_TEST_URL'). '/api/stkpush',
+           'AccountReference' => $request -> account,
+          'TransactionDesc' => $request -> account
+        );
 
-    //     $url ='/stkpush/v1/processrequest';
-    //     $response =$this->makeHttp($url,$curl_post_data);
+        $url ='/stkpush/v1/processrequest';
+        $response =$this->makeHttp($url,$curl_post_data);
 
-    //    return $response;
+    
+       return $response;
 
-    //   }
+      }
 
     //simulate transaction
     public function simulateTransaction(Request $request)
@@ -103,32 +104,47 @@ class MpesaController extends Controller
             ? 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate'
             : 'https://api.safaricom.co.ke/mpesa/c2b/v1/simulate';
 
-        $response = $this->makeHttp($url, '', $body);
+        $response = $this->makeHttp($url, $body);
 
         return $response;
     }
 
 
-
+// $token = '',
     //register urls
-    public static function makeHttp($url, $token = '', $body)
+    public  function makeHttp($url,  $body)
     {
         //\Log::info('The token is ' . $token);
-        $curl = curl_init($url);
-        $headers = [
-            "Authorization: Bearer " . $token,
-            'Content-Type: application/json'
-        ];
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $curl_response  = curl_exec($curl);
-        curl_close($curl);
+        $url='http://sandbox.safaricom.co.ke/mpesa/'.$url;
+        // $curl = curl_init($url);
+        // $headers = [
+        //     "Authorization: Bearer " ,
+        //     'Content-Type: application/json'
+        // ];
+        // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($curl, CURLOPT_POST, 1);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        // $curl_response  = curl_exec($curl);
+        // curl_close($curl);
+         $curl=curl_init();
+         curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL=>$url,
+                CURLOPT_HTTPHEADER=>array('Content-Type:application/json','Authorization:Bearer'.$this->getAccessToken()),
+                CURLOPT_RETURNTRANSFER=>true,
+                CURLOPT_POST=>true,
+                CURLOPT_POSTFIELDS=>json_encode($body)
+            )
+         );
+         $curl_response=curl_exec($curl);
+         curl_close($curl);
+         return $curl_response;
 
-        \Log::info($curl_response);
-        return $curl_response;
+        // \Log::info($curl_response);
+       
     }
-
+// . $token
     
 }

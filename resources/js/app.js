@@ -1,6 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
-
+import '../views/payment';
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -21,3 +21,5 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
+    //stk
+ 
