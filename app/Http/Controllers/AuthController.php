@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -17,8 +18,8 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|string|max:255|unique:users,email',
-            'password' => 'required|confirmed|min:8|confirmed',
-            'password_confirmation' => 'required',
+            'password' => 'required',
+          
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -43,73 +44,64 @@ class AuthController extends Controller
         // ]);
     }
     public function login(Request $request)
-    {
-        
-        $credentials = $request->validate([
+    {  Log::info($request);
+
+         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
+            'device_name'=>'nullable'
         ]);
-
-         // Attempt to log the user in
-         if (Auth::attempt($credentials)) {
-            // Authentication was successful, generate a token
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
+        Log::info("reached");
+        
+        $user = User::where('email',$request->email)->first();
+        Log::info($user);
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'email' => ['The provided credentials are incorrect.'],
+        ]);
+    }
+            $token = $user->createToken('auth')->plainTextToken;
+            Log::info($token);
             return response()->json([
                 'message' => 'Login successful',
                 'token' => $token,
                 'user' => $user,
             ], 200);
-        }
-        // Authentication failed
-        return response()->json(['message' => 'Invalid credentials'], 401);
+       
+    }
+    // logout
+    public function logout(Request $request)
+    {
+        // Revoke the user's current token
+        $request->user()->currentAccessToken()->delete();
 
-        //validate user
-    //     $user = $request->validate([
-    //         'email' => 'required|email|string|exists:users,email',
-    //         'password' => [
-    //             'required',
-    //         ],
-    //         'remember' => 'boolean'
-    //     ]);
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }
 
-    //     if (is_null($request->email) || is_null($request->password)) {
-    //         return response()->json(['status' => 500, 'message' => 'Incomplete fields!']);
-    //     } else {
-    //         $checkuser = User::whereEmail($request->email)->first();
+    public function sessionLogin(Request $request)
+{
+    $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
 
-    //         if (is_null($checkuser)) {
-    //             return response()->json(['status' => 500, 'message' => 'User not found']);
-    //         } else {
-    //             if (password_verify($request->password, $checkuser->password)) {
-    //                 return response()->json(['status' => 200, 'message' => 'Logged In Successfully!']);
-    //             } else {
-    //                 return response()->json(['status' => 500, 'message' => 'Invalid password']);
-    //             }
-    //         }
-    //     }
-    //     $remember = $credentials['remember'] ?? false;
-    //     unset($credentials['remember']);
+    $user = User::rWhere('email', $request->email)
+                ->first();
 
-    //     if (!Auth::attempt($credentials, $remember)) {
-    //         //if attemps returns false
-    //         return response(
-    //             [
-    //                 'error' => 'The provided credentials are not correct'
-    //             ],
-    //             status: 422
-    //         );
-    //     }
-    //     //authorized user
-    //     $user = Auth::user();
-    //     $token = $user->createToken(name: 'main')->plainTextToken;
+    if (!$user) {
+        return response(['message' => 'The provided credentials are incorrect.'], 401);
+    }
 
-    //     return response([
-    //         'user' => $user,
-    //         'token' => $token,
-    //     ]);
-    // }
+
+    if (!Hash::check($request->password, $user->password)) {
+        return response(['message' => 'The provided credentials are incorrect.'], 401);
+    }
+
+    Auth::login($user);
+
+    $request->session()->regenerate();
+
+    return response()->json(['message' => 'Logged in successfully.'],200);
+}
 }
 
-}

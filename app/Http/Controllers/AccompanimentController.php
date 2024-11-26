@@ -27,7 +27,7 @@ class AccompanimentController extends Controller
 
     {
         $request->validate([
-            'product_id' => 'int|required|max:20',
+            // 'product_id' => 'int|required|max:20',
             'image' => 'string|required|max:255',
             'name'=>'string|required|max:255',
             'price'=>'double|required|max:255',
@@ -35,7 +35,7 @@ class AccompanimentController extends Controller
         ]);
         Accompaniment::create([
             'image' => $request->image,
-            'product_id' => $request->product_id,
+            // 'product_id' => $request->product_id,
             'price'=>$request->price,
             'name'=>$request->name,
             'description'=>$request->description

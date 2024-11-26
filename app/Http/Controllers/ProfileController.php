@@ -8,56 +8,54 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+
 use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): Response
+    public function fetchProfile()
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+        $user = Auth::user();
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            // 'phone' => $user->phone,
+            'profile_image' => $user->profile_image, 
         ]);
+     
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+    // public function updatePhone(Request $request)
+    // {
+    //     $request->validate([
+    //         'phone' => 'required|string|max:15',
+    //     ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+    //     $user = Auth::user();
+    //     $user->phone = $request->phone;
+    //     $user->save();
 
-        $request->user()->save();
+    //     return response()->json(['message' => 'Phone number updated successfully.']);
+    // }
 
-        return Redirect::route('profile.edit');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function uploadProfileImage(Request $request)
     {
         $request->validate([
-            'password' => ['required', 'current-password'],
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        $filePath = $request->file('profile_image')->store('profile_images', 'public');
+        $user = Auth::user();
+        $user->profile_image = asset('storage/'. $filePath);
+        $user->save();
+        Log::info('Profile image updated successfully:', [
+            'user_id' => $user->id,
+            'image_path' => $user->profile_image,
+        ]);
+        return response()->json(['message' => 'Profile image updated successfully.']);
+        Log::info(response());
     }
+   
+ 
 }

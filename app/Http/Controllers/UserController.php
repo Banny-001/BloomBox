@@ -26,36 +26,36 @@ class UserController extends Controller
         $data = $usersPerMonth->pluck("count")->toArray();
         $labels = $usersPerMonth->pluck("month")->toArray();
 
-        $chart = Chartjs::build()
-        ->name("UserRegistrationsChart")
-        ->type("line")
-        ->size(["width" => 400, "height" => 200])
-        ->labels($labels)
-        ->datasets([
-            [
-                "label" => "User Registrations",
-                "backgroundColor" => "rgba(38, 185, 154, 0.31)",
-                "borderColor" => "rgba(38, 185, 154, 0.7)",
-                "data" => $data
-            ]
-            ])
-            ->options([
-                'scales' => [
-                    'x' => [
-                        'type' => 'time',
-                        'time' => [
-                            'unit' => 'month'
-                        ],
-                        'min' => $start->format("Y-m-d"),
-                    ]
-                ],
-                'plugins' => [
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Monthly User Registrations'
-                    ]
-                ]
-            ]);
+        // $chart = Chartjs::build()
+        // ->name("UserRegistrationsChart")
+        // ->type("line")
+        // ->size(["width" => 400, "height" => 200])
+        // ->labels($labels)
+        // ->datasets([
+        //     [
+        //         "label" => "User Registrations",
+        //         "backgroundColor" => "rgba(38, 185, 154, 0.31)",
+        //         "borderColor" => "rgba(38, 185, 154, 0.7)",
+        //         "data" => $data
+        //     ]
+        //     ])
+        //     ->options([
+        //         'scales' => [
+        //             'x' => [
+        //                 'type' => 'time',
+        //                 'time' => [
+        //                     'unit' => 'month'
+        //                 ],
+        //                 'min' => $start->format("Y-m-d"),
+        //             ]
+        //         ],
+        //         'plugins' => [
+        //             'title' => [
+        //                 'display' => true,
+        //                 'text' => 'Monthly User Registrations'
+        //             ]
+        //         ]
+        //     ]);
             return view("user.chart", compact("chart"));
 
     

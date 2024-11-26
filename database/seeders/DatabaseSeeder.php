@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         //  \App\Models\Invoice::factory(5)->create();
           \App\Models\User::factory(5)->create();
 
+        $this->call([
+            ProductSeeder::class,
+        ]);
+
        
     }
 }
