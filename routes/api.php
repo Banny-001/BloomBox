@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     WebhookController,
     GoogleAuthController,
     MpesaController,
-    RolesAndPermissionController
+    RolesAndPermissionController,
+    UserController
 };
 
 /*
@@ -35,7 +36,8 @@ use App\Http\Controllers\{
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('user-register', [AuthController::class, 'register']);
 Route::post('google-auth', [GoogleAuthController::class, 'googleAuth']);
-Route::get('products', [ProductController::class, 'index']);
+
+
 
 // Secured Routes with auth:sanctum Middleware
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -46,6 +48,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::put('/update-phone', [ProfileController::class, 'updatePhone']);
     Route::post('/upload-profile-image', [ProfileController::class, 'uploadProfileImage']);
 
+    //users
+    Route::get('users', [UserController::class, 'index']);
     //products
  
     Route::post('products', [ProductController::class, 'store']);
@@ -54,13 +58,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('products/{id}', [ProductController::class, 'edit']);
 
     //florists
+   
+    // Route::get('florists', [FloristController::class, 'indexView']);
+   
+    Route::get('products', [ProductController::class, 'index']);
     Route::get('florists', [FloristController::class, 'index']);
-    Route::get('florists', [FloristController::class, 'indexView']);
-    Route::get('florists/create', [FloristController::class, 'create']);
+   
     Route::post('florists/create', [FloristController::class, 'store']);
     Route::get('florists/{id}/edit', [FloristController::class, 'edit']);
     Route::put('florists/{id}/edit', [FloristController::class, 'update']);
-    Route::get('florists/{id}/delete', [FloristController::class, 'destroy']);
+    Route::delete('florists/{id}/delete', [FloristController::class, 'destroy']);
 
     //accompaniments
     Route::get('accompaniments', [AccompanimentController::class, 'index']);

@@ -19,7 +19,9 @@ class Florist extends Model
         'business_name',
         'location',
         'user_id',
-        'phone_number'
+        'phone_number',
+        'name',
+        'email'
 
         
     ];
