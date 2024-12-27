@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('florists', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unique(); // Relating to the users table
-            $table->string('phone_number')->unique();
-            $table->string('location');
-            $table->string('business_name');
-            $table->string('image');
+            $table->string('name'); // Name of the user
+            $table->string('email')->unique(); // User's email, must be unique
+            $table->timestamp('email_verified_at')->nullable(); // When the email is verified
+            $table->string('password'); // User's password
+            $table->rememberToken();
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('florists');
+        Schema::dropIfExists('users');
     }
 };
