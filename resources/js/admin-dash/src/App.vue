@@ -1,12 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import Navbar from "./components/navbar.vue"
+import { useRoute } from "vue-router";
+import Navbar from "./components/navbar.vue";
+
+const route = useRoute();
 </script>
 
 <template>
- <v-app>
-    <Navbar/>
-   
+  <v-app>
+    <!-- Show Navbar only for authenticated routes -->
+    <Navbar v-if="!['/', '/register'].includes(route.path)" />
+
+    <!-- Render routed content -->
+    <RouterView />
   </v-app>
 </template>
 
@@ -15,4 +20,3 @@ export default {
   name: "App",
 };
 </script>
-

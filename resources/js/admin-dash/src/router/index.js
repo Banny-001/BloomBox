@@ -1,21 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import Login from '../views/Auth/login.vue';
-import Register from '../views/Auth/register.vue';
+import Login from '../components/Auth/login.vue'
+import Register from '../components/Auth/register.vue';
 import Products from '../views/products/products.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: HomeView,
+      meta: { requiresAuth: true },
     },
     {
-      path: '/login',
+      path: '/',
       name: 'login',
-      component: Login, // Dynamic import for login view
+      component: () => import('../components/Auth/login.vue'),// Dynamic import for login view
+     
     },
     {
       path: '/register',
@@ -26,16 +28,19 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'), // About view
+      meta: { requiresAuth: true },
     },
     {
       path: '/products',
       name: 'products',
       component:Products, // Products list view
+      meta: { requiresAuth: true },
     },
     {
       path: '/create',
       name: 'CreateProduct',
-      component: () => import('../views/products/createproducts.vue'), // Create product view
+      component: () => import('../views/products/createproducts.vue'), 
+      meta: { requiresAuth: true },
     },
     {
       path: '/edit/:id', // Use :id as a dynamic parameter
@@ -52,7 +57,8 @@ const router = createRouter({
     {
       path: '/florists',
       name: 'florists',
-      component: () => import('../views/florists/florists.vue'), // Florists view
+      component: () => import('../views/florists/florists.vue'), 
+      meta: { requiresAuth: true },
     },
     {
       path: '/florists/create',
@@ -65,6 +71,15 @@ const router = createRouter({
       component: () => import('@/views/florists/edit.vue'), // Edit florist view
     },
   ],
+});
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem("token"); // Replace with Vuex state if applicable
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

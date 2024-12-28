@@ -1,8 +1,9 @@
 <template>
+
     <v-container>
       <v-card class="pa-5">
         <v-img
-        src="/public/images/Neutral Beige Simple Aesthetic Flower Boutique Logo.png"
+       src="https://i.pinimg.com/736x/75/86/f9/7586f944b521d91b578636b8cf63cce0.jpg"
         alt="logo"
         max-height="200"
         max-width="300"
@@ -93,6 +94,7 @@
         </v-card-text>
       </v-card>
     </v-container>
+
   </template>
   
   <script setup>
@@ -126,7 +128,7 @@ const visible = ref(false);
        axiosInstance.post('/user-register',form)
       .then(response => {
         //   router.push({name:'/login'});
-      window.location.href = "/login";    
+      window.location.href = "/";    
       alert(' Reqistered successfully!') 
       })
       .catch(error =>{
