@@ -39,7 +39,7 @@ const router = createRouter({
     {
       path: '/create',
       name: 'CreateProduct',
-      component: () => import('../views/products/createproducts.vue'), 
+      component: () => import('../views/products/create.vue'), 
       meta: { requiresAuth: true },
     },
     {
@@ -66,7 +66,7 @@ const router = createRouter({
       component: () => import('../views/florists/create.vue'), // Create florist view
     },
     {
-      path: '/florists/edit/:id', // Use :id for dynamic edit florist view
+      path: '/florists/edit/${item.id}', // Use :id for dynamic edit florist view
       name: 'edit',
       component: () => import('@/views/florists/edit.vue'), // Edit florist view
     },

@@ -57,7 +57,7 @@
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/florists/edit/id`)"
+              @click="$router.push(`/florists/edit/${item.id}`)"
             >
               mdi-pencil
             </v-icon>
@@ -66,7 +66,7 @@
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/florists/show/${item.id}`)"
+              @click="$router.push(`/show/${item.id}`)"
             >
               mdi-eye
             </v-icon>
@@ -137,6 +137,7 @@ const fetchFlorists = async () => {
     isLoading.value = false;
   }
 };
+//edit 
 
 // Confirm delete dialog
 const confirmDelete = (item) => {
@@ -175,7 +176,7 @@ onMounted(fetchFlorists);
 }
 
 .v-btn {
-  background-color: #732d91; /* Darker purple for buttons */
+  background-color: #732d91; 
   color: white;
 }
 
