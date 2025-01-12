@@ -30,7 +30,7 @@
       <v-card-text class="bg-surface-light pt-10 rounded-xl">
         <v-data-table
           :headers="headers"
-          :items="items"
+          :items="products"
           :loading="isLoading"
           loading-text="Fetching products..."
           class="elevation-2"
@@ -113,6 +113,9 @@ const headers = [
   { title: "Name", value: "name" },
   { title: "Description", value: "description" },
   { title: "Price", value: "price" },
+  {title:"Category",value:"category.name"},
+  {title:"Special Occassion",value:"special_occassions.name"},
+  {title:"Florist Business name",value:"florists.business_name"},
   { title: "Image", value: "image", sortable: false },
   { title: "Actions", value: "actions", sortable: false },
 ];

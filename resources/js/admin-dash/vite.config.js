@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './resources/js'), // This should point to your resources/js folder
+      '@': path.resolve(__dirname, './src'), // This should point to your resources/js folder
     },
   },
 });

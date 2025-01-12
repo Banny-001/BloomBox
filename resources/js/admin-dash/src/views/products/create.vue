@@ -6,19 +6,19 @@
             outlined
         >
             <v-card color="primary" outlined>
-              <template v-slot:title>
-                <span class="font-weight text-h5">Create Products</span>
-                <div class="d-flex justify-end">
-                  <v-btn
-                    size="large"
-                    color="secondary"
-                    class="rounded-xl mx-2"
-                    @click="$router.push('/products')"
-                  >
-                    Back
-                  </v-btn>
-                </div>
-              </template>
+                <template v-slot:title>
+                    <span class="font-weight text-h5">Create Products</span>
+                    <div class="d-flex justify-end">
+                        <v-btn
+                            size="large"
+                            color="secondary"
+                            class="rounded-xl mx-2"
+                            @click="$router.push('/products')"
+                        >
+                            Back
+                        </v-btn>
+                    </div>
+                </template>
             </v-card>
 
             <v-card-text class="bg-surface-light pt-6 mt-4 rounded-xl">
@@ -81,19 +81,22 @@
                         <!-- Florist -->
                         <v-col cols="12" md="6">
                             <label for="florist" class="form-label"
-                                >Florist</label
+                                >Florist Shop name</label
                             >
-                            <v-select
+                            <v-autocomplete
                                 id="florist"
                                 v-model="form.florist_id"
                                 :items="florists"
+                                item-title="business_name"
+                                item-value="id"
                                 dense
                                 clearable
+                                :loading="loadingFlorist"
                                 :rules="[(v) => !!v || 'Florist is required']"
                                 required
                                 hide-details
                                 class="my-3"
-                            ></v-select>
+                            ></v-autocomplete>
                         </v-col>
 
                         <!-- Popular -->
@@ -103,7 +106,7 @@
                             >
                             <v-select
                                 id="popular"
-                                v-model="form.popular_id"
+                                v-model="form.popular"
                                 :items="popularItems"
                                 dense
                                 clearable
@@ -117,29 +120,36 @@
                         <!-- Category -->
                         <v-col cols="12" md="6">
                             <label for="category">Category</label>
-                            <v-select
+                            <v-autocomplete
                                 id="category"
                                 v-model="form.category_id"
                                 :items="categories"
+                                item-title="name"
+                                item-value="id"
                                 dense
                                 clearable
+                                :loading="loadingCategory"
                                 :rules="[(v) => !!v || 'Category is required']"
                                 required
                                 hide-details
-                            ></v-select>
+                                class="my-3"
+                            ></v-autocomplete>
                         </v-col>
 
                         <!-- Special Occasion -->
                         <v-col cols="12" md="6">
-                            <label for="special_occasion" class="form-label"
-                                >Special Occasion</label
+                            <label for="special_occassion" class="form-label"
+                                >Special Occassion</label
                             >
-                            <v-select
-                                id="special_occasion"
-                                v-model="form.special_occasion_id"
-                                :items="specialOccasions"
+                            <v-autocomplete
+                                id="'special_occassion"
+                                v-model="form.special_occassion_id"
+                                :items="specialOccassions"
+                                item-title="name"
+                                item-value="id"
                                 dense
                                 clearable
+                                :loading="loadingSpecialOccassions"
                                 :rules="[
                                     (v) =>
                                         !!v || 'Special occasion is required',
@@ -147,7 +157,7 @@
                                 required
                                 hide-details
                                 class="my-3"
-                            ></v-select>
+                            ></v-autocomplete>
                         </v-col>
 
                         <!-- Image -->
@@ -184,29 +194,86 @@
 </template>
 
 <script>
+import axiosInstance from "@/axiosInstance";
 export default {
     data() {
         return {
+            loading: false,
+            florists: [],
+            loadingFlorist: false,
+            loadingCategory: false,
+            loadingSpecialOccassions: false,
+            popularItems: ["True", "False"],
+            categories: [],
+            specialOccassions: [],
             form: {
                 name: "",
                 price: "",
                 description: "",
-                florist_id: null,
-                popular_id: null,
-                category_id: null,
-                special_occasion_id: null,
+                florist_id: "",
+                popular: "",
+                category_id: "",
+                special_occassion_id: "",
                 image: null,
             },
-            florists: ["Florist 1", "Florist 2", "Florist 3"],
-            popularItems: ["Yes", "No"],
-            categories: ["Roses", "Lilies", "Daisies"],
-            specialOccasions: ["Birthday", "Anniversary", "Wedding"],
+
         };
     },
     methods: {
-        create() {
-            // Submit form logic here
+        async fetchFlorists() {
+            this.loadingFlorist = true;
+            try {
+                const response = await axiosInstance.get("/florists");
+                this.florists = response.data;
+            } catch (error) {
+                console.error("Error fetching florists:", error);
+                this.$toast.error("Failed to load florists");
+            } finally {
+                this.loadingFlorist = false;
+            }
         },
+        async fetchCategories() {
+            this.loadingCategory = true;
+            try {
+                const response = await axiosInstance.get("/categories");
+                this.categories = response.data;
+            } catch (error) {
+                console.error("Error fetching Categories:", error);
+                this.$toast.error("Failed to load Categories");
+            } finally {
+                this.loadingCategory = false;
+            }
+        },
+        async fetchSpecialOccassions() {
+            this.loadingSpecialOccassions = true;
+            try {
+                const response = await axiosInstance.get("/SpecialOccassion");
+                this.specialOccassions = response.data;
+                console.log(response.data)
+            } catch (error) {
+                console.error("Error fetching Special Occassions:", error);
+                this.$toast.error("Failed to load Special Occassions");
+            } finally {
+               this.loadingSpecialOccassions = false;
+            }
+        },
+        async create() {
+            try {
+                const formData = new FormData();
+                for (const key in this.form) {
+                    formData.append(key, this.form[key]);
+                }
+                await axiosInstance.post('/products', formData);
+                this.$router.push('/products');
+            } catch (error) {
+                console.error("Error creating product:", error);
+            }
+        },
+    },
+    mounted() {
+        this.fetchFlorists();
+        this.fetchCategories();
+        this.fetchSpecialOccassions();
     },
 };
 </script>

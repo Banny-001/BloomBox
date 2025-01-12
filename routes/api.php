@@ -18,7 +18,11 @@ use App\Http\Controllers\{
     GoogleAuthController,
     MpesaController,
     RolesAndPermissionController,
-    UserController
+    UserController,
+    LocationController,
+    SpecialOccassionController,
+    CategoryController
+
 };
 
 /*
@@ -51,7 +55,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //users
     Route::get('users', [UserController::class, 'index']);
     //products
- 
     Route::post('products', [ProductController::class, 'store']);
     Route::put('products/{id}', [ProductController::class, 'update']);
     Route::delete('products/{id}', [ProductController::class, 'destroy']);
@@ -66,9 +69,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
    
     Route::post('florists/create', [FloristController::class, 'store']);
     Route::get('florists/{id}/edit', [FloristController::class, 'edit']);
-    Route::put('florists/{id}/edit', [FloristController::class, 'update']);
+    // Route::put('florists/{id}/edit', [FloristController::class, 'update']);
+    Route::put('florists/{id}', [FloristController::class, 'update']);
+    Route::get('florists/{id}', [FloristController::class, 'show']);
     Route::delete('florists/{id}/delete', [FloristController::class, 'destroy']);
-
+    //location
+    Route::get('locations', [LocationController::class, 'index']);
+    //special occassions
+    Route::get('SpecialOccassion',[SpecialOccassionController::class,'index']);
+    //categories
+    Route::apiResource('categories', CategoryController::class);
     //accompaniments
     Route::get('accompaniments', [AccompanimentController::class, 'index']);
     Route::get('accompaniments', [AccompanimentController::class, 'indexView']);

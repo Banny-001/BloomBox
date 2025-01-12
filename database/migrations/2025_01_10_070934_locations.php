@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('popular', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('reason')->nullable();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->float('popularity_score')->nullable(); 
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('popular');
+        Schema::dropIfExists('locations');
     }
 };

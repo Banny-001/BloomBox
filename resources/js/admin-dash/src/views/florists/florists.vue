@@ -50,14 +50,15 @@
               </v-btn>
             </v-row>
           </template>
-
+          <!-- @click="$router.push(`/florists/edit/${item.id}`)"  -->
           <template v-slot:[`item.actions`]="{ item }">
             <!-- Edit Icon -->
             <v-icon
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/florists/edit/${item.id}`)"
+             
+              @click="editItem(item)"
             >
               mdi-pencil
             </v-icon>
@@ -66,7 +67,7 @@
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/show/${item.id}`)"
+              @click="showItem(item)"
             >
               mdi-eye
             </v-icon>
@@ -105,6 +106,9 @@
 <script setup>
 import axiosInstance from "@/axiosInstance";
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // Data properties
 const florists = ref([]);
@@ -118,7 +122,7 @@ let selectedFlorist = null;
 const headers = [
   { title: "Business Name", value: "business_name" },
   { title: "Name", value: "name" },
-  { title: "Location", value: "location" },
+  { title: "Location", value: "location.name" },
   { title: "Phone Number", value: "phone_number" },
   { title: "Email", value: "email" },
   { title: "Image", value: "image", sortable: false },
@@ -138,6 +142,15 @@ const fetchFlorists = async () => {
   }
 };
 //edit 
+const editItem = (item) => {
+  selectedFlorist = item;
+  router.push({path:`/edit/${item.id}`});
+};
+//show
+const showItem =(item)=>{
+  selectedFlorist = item;
+  router.push({path:`/show/${item.id}`});
+}
 
 // Confirm delete dialog
 const confirmDelete = (item) => {

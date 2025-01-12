@@ -30,13 +30,12 @@ class Product extends Model
             'name',
             'price',
             'description',
-            'popular_id',
+            'popular',
             'category_id',
             'special_occassion_id'
-            // 'product_stock',
+            
            
     ];
-
     public function florist(){
       return $this->belongsTo(Florist::class,'florist_id');
     }
@@ -46,10 +45,6 @@ class Product extends Model
     public function invoiceItems() {
         
         return $this->belongsToMany(InvoiceItem::class);
-    }
-    public function popular() {
-        
-        return $this->belongsToMany(Popular::class);
     }
     public function category() {
         

@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue';
 import Login from '../components/Auth/login.vue'
 import Register from '../components/Auth/register.vue';
 import Products from '../views/products/products.vue';
+import EditFlorist from '../views/florists/edit.vue'
+import ShowFlorist from '../views/florists/show.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,18 +44,18 @@ const router = createRouter({
       component: () => import('../views/products/create.vue'), 
       meta: { requiresAuth: true },
     },
-    {
-      path: '/edit/:id', // Use :id as a dynamic parameter
-      name: 'editProduct',
-      component: () => import('../views/products/editproducts.vue'), // Edit product view
-      props: true,
-    },
-    {
-      path: '/show/:id', // Use :id for dynamic product details view
-      name: 'showProduct',
-      component: () => import('../views/products/showproducts.vue'),
-      props: true,
-    },
+    // {
+    //   path: '/edit/:id', // Use :id as a dynamic parameter
+    //   name: 'editProduct',
+    //   component: () => import('../views/products/editproducts.vue'), // Edit product view
+    //   props: true,
+    // },
+    // {
+    //   path: '/show/:id', // Use :id for dynamic product details view
+    //   name: 'showProduct',
+    //   component: () => import('../views/products/showproducts.vue'),
+    //   props: true,
+    // },
     {
       path: '/florists',
       name: 'florists',
@@ -66,10 +68,16 @@ const router = createRouter({
       component: () => import('../views/florists/create.vue'), // Create florist view
     },
     {
-      path: '/florists/edit/${item.id}', // Use :id for dynamic edit florist view
+      path: '/edit/:id', // Use :id for dynamic edit florist view
       name: 'edit',
-      component: () => import('@/views/florists/edit.vue'), // Edit florist view
+      component: EditFlorist, // Edit florist view
     },
+    {
+      path: '/show/:id', 
+      name: 'show',
+      component: ShowFlorist, 
+    }
+    
   ],
 });
 router.beforeEach((to, from, next) => {
