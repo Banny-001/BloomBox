@@ -10,14 +10,11 @@ class AccompanimentController extends Controller
     public function index()
     {   
         
-        $Accompaniments = Accompaniment::all();
+        // $Accompaniments = Accompaniment::all();
+        $Accompaniments= Accompaniment::with('product')->get();
         return response()->json($Accompaniments);
     }
-    public function indexView()
-    {
-        $accompaniment=Accompaniment::all();
-        return view ('accompaniments.index', compact('accompaniment'));
-    }
+    
 
     public function create()
     {

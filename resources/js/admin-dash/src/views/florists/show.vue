@@ -25,16 +25,16 @@
           <v-card-text class="bg-surface-light pt-6 mt-4 rounded-xl">
               <v-form>
                   <!-- Florist Name -->
+                   <label>Florist Name</label>
                   <v-text-field
-                      label="Florist Name"
                       v-model="florist.name"
                       outlined
                       readonly
                   ></v-text-field>
 
                   <!-- Florist Email -->
+                   <label>Email</label>
                   <v-text-field
-                      label="Email"
                       v-model="florist.email"
                       outlined
                       readonly
@@ -42,16 +42,16 @@
                   ></v-text-field>
 
                   <!-- Florist Phone -->
+                   <label>Phone Number</label>
                   <v-text-field
-                      label="Phone Number"
                       v-model="florist.phone_number"
                       outlined
                       readonly
                   ></v-text-field>
 
                   <!-- Location -->
+                   <label>Location</label>
                   <v-autocomplete
-                      label="Location"
                       v-model="florist.location_id"
                       :items="locations"
                       item-title="name"
@@ -61,14 +61,15 @@
                   ></v-autocomplete>
 
                   <!-- Business Name -->
+                   <label>Business Name</label>
                   <v-text-field
-                      label="Business Name"
                       v-model="florist.business_name"
                       outlined
                       readonly
                   ></v-text-field>
 
                   <!-- Florist Image -->
+                   <label>Florist Image</label>
                   <div v-if="previewImage">
                       <img
                           :src="previewImage"
@@ -112,13 +113,13 @@ export default {
           try {
               const response = await axiosInstance.get(`/florists/${id}`);
               this.florist = response.data;
-              console.log('Florist Image URL:', this.florist.image); 
+              console.log(response.data); 
               if (this.florist.image) {
                   // this.previewImage = `${this.florist.image}`;
                   this.previewImage = this.getImageUrl(this.florist.image);
               }
           } catch (error) {
-              console.error("Error fetching florist details:", error);
+            //   console.error("Error fetching florist details:", error);
               // Optional: Redirect back if florist not found
               // this.$router.push("/florists");
           }

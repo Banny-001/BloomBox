@@ -115,4 +115,5 @@ class FloristController extends Controller
             return response()->json(['error' => 'Florist not found'], 404);
         }
     }
+  
 }

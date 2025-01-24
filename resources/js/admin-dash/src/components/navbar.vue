@@ -25,8 +25,8 @@
     <v-list density="compact" nav>
       <v-list-item
         prepend-icon="mdi-home-city"
-        title="Home"
-        to="/home"
+        title="Dashboard"
+        to="/dashboard"
       ></v-list-item>
       <v-list-item
         prepend-icon="mdi-package-variant"
@@ -37,6 +37,11 @@
         prepend-icon="mdi-leaf"
         title="Florists"
         to="/florists"
+      ></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-gift"
+        title="Accompaniments"
+        to="/accompaniments"
       ></v-list-item>
       <v-list-item
         prepend-icon="mdi-account"

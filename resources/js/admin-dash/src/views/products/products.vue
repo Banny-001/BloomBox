@@ -30,7 +30,7 @@
       <v-card-text class="bg-surface-light pt-10 rounded-xl">
         <v-data-table
           :headers="headers"
-          :items="products"
+          :items="items"
           :loading="isLoading"
           loading-text="Fetching products..."
           class="elevation-2"
@@ -55,7 +55,7 @@
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/edit/${item.id}`)"
+              @click="$router.push(`/editproducts/${item.id}`)"
             >
               mdi-pencil
             </v-icon>
@@ -63,7 +63,7 @@
               class="me-4 center"
               size="large"
               color="success"
-              @click="$router.push(`/show/${item.id}`)"
+              @click="$router.push(`/showproduct/${item.id}`)"
             >
               mdi-eye
             </v-icon>
@@ -114,8 +114,8 @@ const headers = [
   { title: "Description", value: "description" },
   { title: "Price", value: "price" },
   {title:"Category",value:"category.name"},
-  {title:"Special Occassion",value:"special_occassions.name"},
-  {title:"Florist Business name",value:"florists.business_name"},
+  {title:"Special Occassion",value:"special_occassion.name"},
+  {title:"Business name",value:"florist.business_name"},
   { title: "Image", value: "image", sortable: false },
   { title: "Actions", value: "actions", sortable: false },
 ];
@@ -126,6 +126,7 @@ const fetchProducts = async () => {
   try {
     const response = await axiosInstance.get("/products");
     items.value = response.data;
+    console.log(response.data);
   } catch (error) {
     console.error("Error fetching products:", error);
   } finally {

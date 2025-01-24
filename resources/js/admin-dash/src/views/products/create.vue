@@ -63,7 +63,7 @@
                             <label for="description" class="form-label"
                                 >Description</label
                             >
-                            <v-textarea
+                            <v-text-field
                                 id="description"
                                 v-model="form.description"
                                 dense
@@ -75,7 +75,7 @@
                                 required
                                 hide-details
                                 class="my-3"
-                            ></v-textarea>
+                            ></v-text-field>
                         </v-col>
 
                         <!-- Florist -->
@@ -100,7 +100,7 @@
                         </v-col>
 
                         <!-- Popular -->
-                        <v-col cols="12" md="6">
+                        <!-- <v-col cols="12" md="6">
                             <label for="popular" class="form-label"
                                 >Popular</label
                             >
@@ -115,7 +115,7 @@
                                 hide-details
                                 class="my-3"
                             ></v-select>
-                        </v-col>
+                        </v-col> -->
 
                         <!-- Category -->
                         <v-col cols="12" md="6">
@@ -203,7 +203,7 @@ export default {
             loadingFlorist: false,
             loadingCategory: false,
             loadingSpecialOccassions: false,
-            popularItems: ["True", "False"],
+            // popularItems: ["True", "False"],
             categories: [],
             specialOccassions: [],
             form: {
@@ -211,13 +211,15 @@ export default {
                 price: "",
                 description: "",
                 florist_id: "",
-                popular: "",
+                // popular: "",
                 category_id: "",
                 special_occassion_id: "",
                 image: null,
             },
+            
 
         };
+        
     },
     methods: {
         async fetchFlorists() {
@@ -258,15 +260,36 @@ export default {
             }
         },
         async create() {
+            this.loading = true;
+            const formData = new FormData();
+
+            formData.append("price", this.form.price);
+            formData.append("florist_id", this.form.florist_id);
+            formData.append("name", this.form.name);
+            formData.append("description", this.form.description);
+            formData.append("popular", this.form.popular);
+            formData.append("category_id", this.form.category_id);
+            formData.append("special_occassion_id", this.form.special_occassion_id);
+          
+         
+            if (this.form.image) {
+                formData.append("image", this.form.image);
+            }
+            // console.log("Florist ID:", this.form.florist_id);
             try {
-                const formData = new FormData();
-                for (const key in this.form) {
-                    formData.append(key, this.form[key]);
-                }
-                await axiosInstance.post('/products', formData);
+                await axiosInstance.post('/products', formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                
                 this.$router.push('/products');
+                this.$toast.success("Products created successfully");
             } catch (error) {
-                console.error("Error creating product:", error);
+                console.error("Full error object:", error);
+                this.$toast.error("Failed to create product");
+            } finally {
+                this.loading = false;
             }
         },
     },

@@ -5,12 +5,16 @@ import Register from '../components/Auth/register.vue';
 import Products from '../views/products/products.vue';
 import EditFlorist from '../views/florists/edit.vue'
 import ShowFlorist from '../views/florists/show.vue'
+import EditProduct from '../views/products/editproducts.vue'
+import Showproduct from '../views/products/showproducts.vue';
+import Accompaniment from '../views/accompaniments/accompaniment.vue';
+import CreateAccompaniment from '../views/accompaniments/create.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
+      path: '/dashboard',
       name: 'home',
       component: HomeView,
       meta: { requiresAuth: true },
@@ -44,18 +48,17 @@ const router = createRouter({
       component: () => import('../views/products/create.vue'), 
       meta: { requiresAuth: true },
     },
-    // {
-    //   path: '/edit/:id', // Use :id as a dynamic parameter
-    //   name: 'editProduct',
-    //   component: () => import('../views/products/editproducts.vue'), // Edit product view
-    //   props: true,
-    // },
-    // {
-    //   path: '/show/:id', // Use :id for dynamic product details view
-    //   name: 'showProduct',
-    //   component: () => import('../views/products/showproducts.vue'),
-    //   props: true,
-    // },
+    {
+      path: '/editproducts/:id', 
+      name: 'EditProduct',
+      component: EditProduct, 
+    },
+    {
+      path: '/showproduct/:id', 
+      name: 'showProduct',
+      component: Showproduct
+    
+    },
     {
       path: '/florists',
       name: 'florists',
@@ -76,8 +79,18 @@ const router = createRouter({
       path: '/show/:id', 
       name: 'show',
       component: ShowFlorist, 
+    },
+    {
+      path: '/accompaniments',
+      name: 'accompaniments',
+      component: Accompaniment, 
+      meta: { requiresAuth: true },
+    },
+    {
+      path:'/accompaniments/create',
+      name:'create',
+      component: CreateAccompaniment
     }
-    
   ],
 });
 router.beforeEach((to, from, next) => {

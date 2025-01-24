@@ -30,7 +30,6 @@ class Product extends Model
             'name',
             'price',
             'description',
-            'popular',
             'category_id',
             'special_occassion_id'
             
@@ -46,12 +45,16 @@ class Product extends Model
         
         return $this->belongsToMany(InvoiceItem::class);
     }
-    public function category() {
-        
-        return $this->belongsToMany(Category::class);
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
-    public function specialoccassions() {
+    // public function specialoccassions() {
         
-        return $this->belongsToMany(SpecialOccassion::class);
+    //     return $this->belongsTo(SpecialOccassion::class);
+    public function specialOccassion()
+    {
+        return $this->belongsTo(SpecialOccassion::class);
     }
+    
 }

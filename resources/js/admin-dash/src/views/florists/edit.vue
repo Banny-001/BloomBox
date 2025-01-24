@@ -25,16 +25,16 @@
             <v-card-text class="bg-surface-light pt-6 mt-4 rounded-xl">
                 <v-form ref="editForm" @submit.prevent="updateFlorist">
                     <!-- Florist Name -->
+                     <label>Florist Name</label>
                     <v-text-field
-                        label="Florist Name"
                         v-model="florist.name"
                         outlined
                         required
                     ></v-text-field>
 
                     <!-- Florist Email -->
+                     <label>Email</label>
                     <v-text-field
-                        label="Email"
                         v-model="florist.email"
                         outlined
                         required
@@ -42,14 +42,14 @@
                     ></v-text-field>
 
                     <!-- Florist Phone -->
+                     <label>Phone Number</label>
                     <v-text-field
-                        label="Phone Number"
                         v-model="florist.phone_number"
                         outlined
                         required
                     ></v-text-field>
+                    <label>Location</label>
                     <v-autocomplete
-                        label="Location"
                         v-model="florist.location_id"
                         :items="locations"
                         item-title="name"
@@ -60,14 +60,14 @@
                         clearable
                         :rules="[(v) => !!v || 'Location is required']"
                     ></v-autocomplete>
+                    <label>Business Name</label>
                     <v-text-field
-                        label="Business Name"
                         v-model="florist.business_name"
                         outlined
                         required
                     ></v-text-field>
+                    <label>Image</label>
                     <v-file-input
-                        label="Image"
                         prepend-icon="mdi-camera"
                        v-model="selectedFile"
                          accept="image/*"
@@ -82,10 +82,15 @@
                         class="rounded mt-4"
                         style="max-width: 50%; height: auto"
                     />
-                    <!-- Submit Button -->
-                    <div class="d-flex justify-end mt-4">
-                        <v-btn type="submit" color="success" class="rounded-xl">
-                            Save Changes
+                  
+                    <div class="d-flex justify-end mt-6">
+                        <v-btn
+                            size="large"
+                            color="secondary"
+                            class="rounded-xl mx-2"
+                            type="submit"
+                        >
+                            Update
                         </v-btn>
                     </div>
                 </v-form>
@@ -120,7 +125,7 @@ export default {
     async mounted() {
         const floristId = this.$route.params.id;
         // Getting the ID from the route params
-        await this.fetchFloristDetails(floristId); // Fetch florist details when the page is mounted
+        await this.fetchFloristDetails(floristId);
         await this.fetchLocations();
     },
     methods: {
@@ -178,11 +183,6 @@ export default {
             if (this.selectedFile) {
                 formData.append("image", this.selectedFile); 
             }
-            console.log('Payload:', formData);
-    //         console.log('Payload:');
-    // formData.forEach((value, key) => {
-    //     console.log(`${key}:`, value);
-    // });
             try {
                 const response = await axiosInstance.put(
                     `/florists/${this.florist.id}`,
