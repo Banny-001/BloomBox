@@ -3,7 +3,6 @@
         <v-card
             class="mx-auto pt-2 mt-4 ml-2 rounded-xl"
             subtitle="Florists"
-            color="primary"
             width="auto"
             outlined
         >
@@ -11,34 +10,26 @@
                 <span class="font-weight-bold text-h5 white--text"
                     >Florists</span
                 >
-                <v-card
-                    class="d-flex flex-end pt-15"
-                    color="transparent"
-                    outlined
-                >
+                <v-card class="d-flex flex-end pt-15" outlined>
                     <v-row>
-                        <v-autocomplete
-                            :items="florists"
-                            item-title="business_name"
-                            append-inner-icon="mdi-microphone"
-                            class="justify-start"
-                            density="comfortable"
-                            placeholder="Search florists"
-                            prepend-inner-icon="mdi-magnify"
-                            style="max-width: 350px"
-                            theme="light"
-                            variant="solo"
-                            auto-select-first
-                            rounded
-                        ></v-autocomplete>
+                        <Search @update:filteredItems="updateFilteredUsers" />
                         <v-col class="d-flex justify-end">
                             <v-btn
                                 size="x-large"
-                                color="secondary"
                                 class="rounded-xl"
                                 to="/florists/create"
                             >
                                 Create
+                            </v-btn>
+                            <v-btn
+                                size="x-large"
+                                @click="exportData"
+                                class="rounded-xl ml-4"
+                            >
+                                Export
+                                <v-icon class="ml-2" size="24" color="white"
+                                    >mdi-export</v-icon
+                                >
                             </v-btn>
                         </v-col>
                     </v-row>
@@ -53,20 +44,6 @@
                     loading-text="Fetching florists..."
                     class="elevetion-2"
                 >
-                    <template v-slot:top>
-                        <v-row class="d-flex justify-end mb-4 mt-2">
-                            <v-btn
-                                color="secondary"
-                                padding="2px"
-                                @click="exportData"
-                                width="90px"
-                                class="rounded-xl"
-                            >
-                                Export
-                                <v-icon>mdi-export</v-icon>
-                            </v-btn>
-                        </v-row>
-                    </template>
                     <!-- @click="$router.push(`/florists/edit/${item.id}`)"  -->
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- Edit Icon -->
@@ -127,6 +104,7 @@
 import axiosInstance from "@/axiosInstance";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import Search from "../../../components/buttons/search.vue";
 
 const router = useRouter();
 
@@ -198,43 +176,24 @@ const performDelete = async () => {
 
 // Lifecycle hook
 onMounted(fetchFlorists);
+
+const updateFilteredUsers = (newList) => {
+    // filteredUsers.value = newList;
+};
 </script>
 
 <style scoped>
-/* Purple theme for card and actions */
-.v-card {
-    background-color: #5025bc !important; /* Purple background for the card */
-}
-
-.white--text {
-    color: white;
-}
-
 .v-btn {
-    background-color: #732d91;
+    background-color: #03293a;
     color: white;
 }
 
 .v-btn:hover {
-    background-color: #5e2490; /* Even darker purple for hover effect */
+    background-color: #34708e;
 }
 
-.custom-table .v-data-table {
-    background-color: #f4f4f4; /* Light background for the table */
-    font-weight: bold;
-}
-
-.v-dialog {
-    background-color: #ffffff;
-}
-
-/* Adjust padding and spacing for a cleaner layout */
-.v-row {
-    padding: 10px 0;
-}
-
-.v-col {
-    margin-top: 10px;
+.v-card {
+    background-color: #6fb5e7;
 }
 
 .v-divider {

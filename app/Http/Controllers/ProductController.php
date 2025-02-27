@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    
     public function index()
     {
         $products = Product::with(['Category', 'SpecialOccassion','Florist'])->get();
@@ -88,8 +89,6 @@ class ProductController extends Controller
             $validatedData['image'] = $imagePath;
         }
         $product->update($validatedData);
-        dd($validatedData);
-
         return redirect()->back()->with('status', 'products updated');
     }
     public function destroy(int $id)

@@ -5,13 +5,12 @@
             style="margin: 0 auto; width: auto"
             outlined
         >
-            <v-card color="primary" outlined>
+            <v-card  outlined>
                 <template v-slot:title>
                     <span class="font-weight text-h5">Create Products</span>
                     <div class="d-flex justify-end">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             @click="$router.push('/products')"
                         >
@@ -180,7 +179,6 @@
                     <div class="d-flex justify-end mt-6">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             type="submit"
                         >
@@ -302,11 +300,19 @@ export default {
 </script>
 
 <style scoped>
-.bg-surface-light {
-    background-color: #f5f5f5;
-}
-
 .v-btn {
-    font-weight: bold;
-}
+    background-color: #03293a; 
+    color: white;
+  }
+  
+  .v-btn:hover {
+    background-color: #34708e; 
+  }
+  .v-card {
+ 
+    background-color: #6fb5e7;
+  }
+  .v-divider {
+    margin-top: 15px;
+  }
 </style>

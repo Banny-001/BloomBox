@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-card class="mx-auto pt-2 mt-4 ml-2 rounded-xl" subtitle="Products" color="primary" width="auto" outlined>
+    <v-card class="mx-auto pt-2 mt-4 ml-2 rounded-xl" subtitle="Products" width="auto" outlined>
       <template v-slot:title>
         <span class="font-weight-bold text-h5 white--text">Products</span>
         <v-card class="d-flex flex-end pt-15" color="transparent" outlined>
@@ -19,9 +19,17 @@
               rounded
             ></v-autocomplete>
             <v-col class="d-flex justify-end">
-              <v-btn size="x-large" color="secondary" class="rounded-xl" to="/create">
+              <v-btn size="x-large"  class="rounded-xl" to="/create">
                 Create
               </v-btn>
+              <v-btn
+              size="x-large"
+              @click="exportData"
+              class="rounded-xl ml-4" 
+          >
+              Export
+              <v-icon class="ml-2" size="24" color="white">mdi-export</v-icon>
+          </v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -35,21 +43,6 @@
           loading-text="Fetching products..."
           class="elevation-2"
         >
-          <template v-slot:top>
-            <v-row class="d-flex justify-end mb-4 mt-2">
-              <v-btn
-                color="secondary"
-                padding="2px"
-                @click="exportData"
-                width="90px"
-                class="rounded-xl"
-              >
-                Export
-                <v-icon>mdi-export</v-icon>
-              </v-btn>
-            </v-row>
-          </template>
-
           <template v-slot:[`item.actions`]="{ item }">
             <v-icon
               class="me-4 center"
@@ -126,7 +119,6 @@ const fetchProducts = async () => {
   try {
     const response = await axiosInstance.get("/products");
     items.value = response.data;
-    console.log(response.data);
   } catch (error) {
     console.error("Error fetching products:", error);
   } finally {
@@ -166,20 +158,16 @@ onMounted(fetchProducts);
 <style scoped>
 /* Purple theme for card and actions */
 .v-card {
-  background-color: #5025bc !important; /* Purple background for the card */
+ 
+  background-color: #6fb5e7; /* Purple background for the card */
 }
-
-.white--text {
-  color: white;
-}
-
 .v-btn {
-  background-color: #732d91; /* Darker purple for buttons */
+  background-color: #03293a; 
   color: white;
 }
 
 .v-btn:hover {
-  background-color: #5e2490; /* Even darker purple for hover effect */
+  background-color: #34708e; 
 }
 
 .custom-table .v-data-table {

@@ -2,16 +2,15 @@
     <v-main>
         <v-card
             class="pt-4 rounded-xl"
-            style="margin: 0 auto; width: auto"
+              
             outlined
         >
-            <v-card color="primary" outlined>
+            <v-card outlined>
                 <template v-slot:title>
                     <span class="font-weight text-h5">Create Florists</span>
                     <div class="d-flex justify-end">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             @click="$router.push('/florists')"
                         >
@@ -23,7 +22,7 @@
             <v-card-text class="bg-surface-light pt-6 mt-4 rounded-xl">
                 <v-form @submit.prevent="create">
                     <v-row>
-                        <!-- First Row -->
+                      
                         <v-col cols="6">
                             <label for="business_name" class="form-label"
                                 >Business Name</label
@@ -33,9 +32,7 @@
                                 v-model="form.business_name"
                                 dense
                                 clearable
-                                :rules="[
-                                    (v) => !!v || 'Business name is required',
-                                ]"
+                                :rules="[ (v) => !!v || 'Business name is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
@@ -54,7 +51,7 @@
                                 dense
                                 clearable
                                 :loading="loadingLocation"
-                                :rules="[(v) => !!v || 'Location is required']"
+                                :rules="[ (v) => !!v || 'Location is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
@@ -71,9 +68,7 @@
                                 v-model="form.name"
                                 dense
                                 clearable
-                                :rules="[
-                                    (v) => !!v || 'Florist name is required',
-                                ]"
+                                :rules="[ (v) => !!v || 'Florist name is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
@@ -88,9 +83,7 @@
                                 v-model="form.phone_number"
                                 dense
                                 clearable
-                                :rules="[
-                                    (v) => !!v || 'Phone number is required',
-                                ]"
+                                :rules="[ (v) => !!v || 'Phone number is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
@@ -105,7 +98,7 @@
                                 v-model="form.email"
                                 dense
                                 clearable
-                                :rules="[(v) => !!v || 'Email is required']"
+                                :rules="[ (v) => !!v || 'Email is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
@@ -119,11 +112,19 @@
                                 v-model="form.image"
                                 dense
                                 clearable
-                                :rules="[(v) => !!v || 'Image is required']"
+                                :rules="[ (v) => !!v || 'Image is required' ]"
                                 required
                                 hide-details
                                 class="my-3"
+                                @change="updatePreview"
                             ></v-file-input>
+                            <img
+                                v-if="previewImage"
+                                :src="previewImage"
+                                alt="Florist Preview"
+                                class="rounded mt-4"
+                                style="max-width: 50%; height: auto"
+                            />
                         </v-col>
                     </v-row>
 
@@ -131,7 +132,6 @@
                     <div class="d-flex justify-end mt-6">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             type="submit"
                         >
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import axiosInstance from "../../../../axiosInstance";
+import axiosInstance from "@/axiosInstance";
 
 export default {
     data() {
@@ -154,11 +154,13 @@ export default {
             valid: false,
             locations: [],
             loadingLocation: false,
+            previewImage: "",
             form: {
                 business_name: "",
                 location_id: "",
                 name: "",
                 phone_number: "",
+                email: "",
                 image: null,
             },
         };
@@ -174,6 +176,14 @@ export default {
                 this.$toast.error("Failed to load locations");
             } finally {
                 this.loadingLocation = false;
+            }
+        },
+        updatePreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.previewImage = URL.createObjectURL(file);
+            } else {
+                this.previewImage = "";
             }
         },
         async create() {
@@ -213,14 +223,20 @@ export default {
 </script>
 
 <style scoped>
-.bg-surface-light {
-    background-color: #f5f5f5;
-}
-
 .v-btn {
-    font-weight: bold;
+    background-color: #03293a;
+    color: white;
 }
 
+.v-btn:hover {
+    background-color: #34708e;
+}
+.v-card {
+    background-color: #6fb5e7;
+}
+.v-divider {
+    margin-top: 15px;
+}
 .v-form {
     margin: 0 auto;
 }

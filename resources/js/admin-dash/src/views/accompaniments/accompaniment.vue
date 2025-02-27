@@ -3,8 +3,6 @@
         <v-card
             class="mx-auto pt-2 mt-4 ml-2 rounded-xl"
             subtitle="Accompaniments"
-            color="primary"
-            width="auto"
             outlined
         >
             <template v-slot:title>
@@ -13,7 +11,6 @@
                 >
                 <v-card
                     class="d-flex flex-end pt-15"
-                    color="transparent"
                     outlined
                 >
                     <v-autocomplete
@@ -33,12 +30,21 @@
                     <v-col class="d-flex justify-end">
                         <v-btn
                             size="x-large"
-                            color="secondary"
                             class="rounded-xl"
                             to="/accompaniments/create"
                         >
                             Create
                         </v-btn>
+                        <v-btn
+                        size="x-large"
+                        @click="exportData"
+                        class="rounded-xl ml-4"
+                    >
+                        Export
+                        <v-icon class="ml-2" size="24" color="white"
+                            >mdi-export</v-icon
+                        >
+                    </v-btn>
                     </v-col>
                 </v-card>
             </template>
@@ -51,20 +57,6 @@
                     loading-text="Fetching accompaniments..."
                     class="elevetion-2"
                 >
-                    <template v-slot:top>
-                        <v-row class="d-flex justify-end mb-4 mt-2">
-                            <v-btn
-                                color="secondary"
-                                padding="2px"
-                                @click="exportData"
-                                width="90px"
-                                class="rounded-xl"
-                            >
-                                Export
-                                <v-icon>mdi-export</v-icon>
-                            </v-btn>
-                        </v-row>
-                    </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <!-- Edit Icon -->
                         <v-icon
@@ -99,7 +91,7 @@
                             >Confirm Delete</v-card-title
                         >
                         <v-card-text>
-                            Are you sure you want to delete this florist?
+                            Are you sure you want to delete this accompaniment?
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -135,7 +127,7 @@ const isLoading = ref(false);
 const dialogDelete = ref(false);
 const snackbar = ref(false);
 const snackbarMessage = ref("");
-let selectedAccompaniments = null;
+let selectedAccompaniment = null;
 
 //headers
 const headers = [
@@ -180,6 +172,38 @@ const performDelete = async () => {
         // selectedAccompaniments = null;
     }
 };
+//edit
+const editItem = (item) => {
+    selectedAccompaniment= item;
+    router.push({ path: `/editaccompaniment/${item.id}` });
+};
+const showItem = (item) => {
+    selectedAccompaniment= item;
+    router.push({ path: `/showaccompaniment/${item.id}` });
+};
 
 onMounted(fetchAccompaniments);
 </script>
+
+<style scoped>
+.v-card {
+    background-color: #6fb5e7; /* Purple background for the card */
+  }
+  .v-btn {
+    background-color: #03293a; 
+    color: white;
+  }
+  
+  .v-btn:hover {
+    background-color: #34708e; 
+  }
+  
+  .custom-table .v-data-table {
+    background-color: #f4f4f4; /* Light background for the table */
+    font-weight: bold;
+  }
+  
+  .v-dialog {
+    background-color: #ffffff;
+  }
+</style>

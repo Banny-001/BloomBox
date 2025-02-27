@@ -1,17 +1,16 @@
 <template>
     <v-main>
         <v-card
-            class="pt-4 rounded-xl"
+           class="mx-auto pt-2 mt-4 ml-2 rounded-xl"
             style="margin: 0 auto; width: auto"
             outlined
         >
-            <v-card color="primary" outlined>
+            <v-card  outlined>
                 <template v-slot:title>
                     <span class="font-weight text-h5">Edit Product</span>
                     <div class="d-flex justify-end">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             @click="$router.push('/products')"
                         >
@@ -167,7 +166,6 @@
                     <div class="d-flex justify-end mt-6">
                         <v-btn
                             size="large"
-                            color="secondary"
                             class="rounded-xl mx-2"
                             type="submit"
                         >
@@ -232,7 +230,7 @@ export default {
         async fetchSpecialOccassions() {
             this.loadingSpecialOccassions = true;
             try {
-                const response = await axiosInstance.get("/specialOccassions");
+                const response = await axiosInstance.get("/SpecialOccassion");
                 this.specialOccassions = response.data;
             } catch (error) {
                 console.error("Error fetching special occasions:", error);
@@ -315,7 +313,20 @@ export default {
 </script>
 
 <style scoped>
-.bg-surface-light {
-    background-color: #f5f5f5;
-}
+.v-btn {
+    background-color: #03293a; 
+    color: white;
+  }
+  
+  .v-btn:hover {
+    background-color: #34708e; 
+  }
+  .v-card {
+ 
+    background-color: #6fb5e7;
+  }
 </style>
+
+  .v-divider {
+    margin-top: 15px;
+  }

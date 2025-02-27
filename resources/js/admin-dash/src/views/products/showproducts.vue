@@ -3,7 +3,6 @@
       <v-card
         class="mx-auto pt-2 mt-4 ml-2 rounded-xl"
         width="Auto"
-        color="primary"
         outlined
       >
         <!-- Card Header -->
@@ -12,7 +11,6 @@
           <div class="d-flex justify-end">
             <v-btn
               size="large"
-              color="secondary"
               class="rounded-xl mx-2"
               @click="$router.push('/products')"
             >
@@ -168,8 +166,20 @@
   </script>
   
   <style scoped>
-  .bg-surface-light {
-    background-color: #f9f9f9;
+.v-btn {
+    background-color: #03293a; 
+    color: white;
+  }
+  
+  .v-btn:hover {
+    background-color: #34708e; 
+  }
+  .v-card {
+ 
+    background-color: #6fb5e7;
+  }
+  .v-divider {
+    margin-top: 15px;
   }
   </style>
   

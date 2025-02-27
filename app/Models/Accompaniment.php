@@ -13,17 +13,18 @@ class Accompaniment extends Model
     // protected $table='accompaniment';
     
     protected $fillable=[
-        //   'product_id',
-          'accompaniment_name',
-          'accompaniment_image',
-          'accompaniment_price'
+          'product_id',
+          'name',
+          'image',
+          'price',
+          'description'
     ];
     public function orders() {
         return $this->hasMany(Order::class);
     }
-    // public function products() {
-    //     return $this->belongsTo(Product::class);
-    // }
+    public function product() {
+        return $this->belongsTo(Product::class);
+    }
     public function invoiceItems()
     {
         return $this->hasMany(InvoiceItem::class);

@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('accompaniments/create', [AccompanimentController::class, 'create']);
     Route::post('accompaniments/create', [AccompanimentController::class, 'store']);
     Route::get('accompaniments/{id}/edit', [AccompanimentController::class, 'edit']);
-    Route::put('accompaniments/{id}/edit', [AccompanimentController::class, 'update']);
+    Route::put('accompaniments/{id}', [AccompanimentController::class, 'update']);
     Route::get('accompaniments/{id}/delete', [AccompanimentController::class, 'destroy']);
 
 

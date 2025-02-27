@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Accompaniment;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 class AccompanimentController extends Controller
 {
     public function index()
-    {   
-        
-        // $Accompaniments = Accompaniment::all();
-        $Accompaniments= Accompaniment::with('product')->get();
+    {
+
+        $Accompaniments = Accompaniment::with('product')->get();
         return response()->json($Accompaniments);
     }
-    
 
     public function create()
     {
@@ -24,47 +22,61 @@ class AccompanimentController extends Controller
 
     {
         $request->validate([
-            // 'product_id' => 'int|required|max:20',
-            'image' => 'string|required|max:255',
-            'name'=>'string|required|max:255',
-            'price'=>'double|required|max:255',
-            'description'=>'string|required|max:255',
+            'product_id' => 'int|required|max:20',   
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'name' => 'string|required|max:255',
+            'price' => 'numeric|required',
+            'description' => 'string|required|max:255',
         ]);
-        Accompaniment::create([
-            'image' => $request->image,
-            // 'product_id' => $request->product_id,
-            'price'=>$request->price,
-            'name'=>$request->name,
-            'description'=>$request->description
-        ]);
+        // Handle image upload
+        $Accompaniment = new Accompaniment();
+        $Accompaniment->name = $request->name;
+        $Accompaniment->description = $request->description;
+        $Accompaniment->price = $request->price;
+        $Accompaniment->product_id = $request->product_id;
+        $imagePath = $request->file('image')->store('accompaniment', 'public');
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('accompaniment', 'public');
+            $Accompaniment->image = $imagePath;
+        }
 
-        return redirect('accompaniments/create')->with('status', 'Accompaniments Created');
+        $Accompaniment->save();
+
+        return redirect('accompaniments/create')->with('status', 'Accompaniment Created');
     }
 
     public function edit(int $id)
     {
         $accompaniment = Accompaniment::findorFail($id);
-        return view('accompaniments.edit', compact('accompaniment'));
+        // $accompaniment->image = asset("storage/{ $accompaniment->image}");
+        $accompaniment->image = asset("storage/" . $accompaniment->image);
+        return response()->json($accompaniment, 200);
     }
 
-    public function update(Request $request,int $id )
+    public function update(Request $request, int $id)
     {
-        $request->validate([
-             'product_id' => 'int|required|max:20',
-            'image' => 'string|required|max:255',
-            'name'=>'string|required|max:255',
-            'price'=>'double|required|max:255',
-            'descrition'=>'string|required|max:255'
+        $validatedData= $request->validate([
+            'product_id' => 'int|required|max:20',
+            // 'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+              
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'name' => 'string|required|max:255',
+            'price' => 'numeric|required',
+            'description' => 'string|required|max:255',
         ]);
-        Accompaniment::findorFail($id)->update([
-            'image' => $request->image,
-             'product_id' => $request->product_id,
-            'price'=>$request->price,
-            'name'=>$request->name,
-            'description'=>$request->description,
-        ]);
-        return redirect()->back()->with('status', 'Accompaniments Updated');
+        $accompaniment=Accompaniment::findorFail($id);
+        if ($request->hasFile('image')) {
+                if ($accompaniment->image && Storage::disk('public')->exists($accompaniment->image)) {
+                    Storage::disk('public')->delete($accompaniment->image);
+                };
+                $imagePath = $request->file('image')->store('accompaniment_images', 'public');
+                    $validatedData['image'] = $imagePath;
+            }
+            $accompaniment->update($validatedData);
+        // return redirect()->back()->with('status', 'Accompaniments Updated');
+        return response()->json(['status' => 'Accompaniment updated successfully'], 200);
+
     }
     public function destroy(int $id)
     {

@@ -56,5 +56,8 @@ class Product extends Model
     {
         return $this->belongsTo(SpecialOccassion::class);
     }
+    public function accompaniment() {
+        return $this->hasMany(Accompaniment::class);
+    }
     
 }

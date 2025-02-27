@@ -9,6 +9,10 @@ import EditProduct from '../views/products/editproducts.vue'
 import Showproduct from '../views/products/showproducts.vue';
 import Accompaniment from '../views/accompaniments/accompaniment.vue';
 import CreateAccompaniment from '../views/accompaniments/create.vue';
+import CreateFlorist from "../views/florists/createflorist.vue";
+import EditAccompaniment from "../views/accompaniments/edit.vue";
+import ShowAccompaniment from "../views/accompaniments/show.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +33,12 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: Register, // Dynamic import for register view
+    },
+    {
+      path: '/users',
+      name:'user',
+      component: ()=>import ( "../views/AccessControl/users/user.vue"),
+      meta: { requiresAuth: true },
     },
     {
       path: '/about',
@@ -67,8 +77,8 @@ const router = createRouter({
     },
     {
       path: '/florists/create',
-      name: 'create',
-      component: () => import('../views/florists/create.vue'), // Create florist view
+      name: 'createflorist',
+      component: CreateFlorist
     },
     {
       path: '/edit/:id', // Use :id for dynamic edit florist view
@@ -90,7 +100,18 @@ const router = createRouter({
       path:'/accompaniments/create',
       name:'create',
       component: CreateAccompaniment
-    }
+    },
+    {
+      path: '/editaccompaniment/:id', 
+      name: 'EditAccompaniment',
+      component: EditAccompaniment, 
+    },
+    {
+      path: '/showaccompaniment/:id', 
+      name: 'ShowAccompaniment',
+      component: ShowAccompaniment, 
+    },
+  
   ],
 });
 router.beforeEach((to, from, next) => {
